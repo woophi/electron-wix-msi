@@ -146,7 +146,6 @@ export class MSICreator {
   private registry: Array<Registry> = [];
   private tree: FileFolderTree | undefined;
   private components: Array<Component> = [];
-  private appDirectoryId: string = '';
 
   constructor(options: MSICreatorOptions) {
     this.appDirectory = path.normalize(options.appDirectory);
@@ -449,15 +448,14 @@ export class MSICreator {
    * @returns {string}
    */
   private getUIVariables(ui: UIOptions): string {
-    const images = { ...(ui.images || {}), dirId: this.appDirectoryId };
+    const images = ui.images || {};
     const variableMap: StringMap<string> = {
       background: 'WixUIDialogBmp',
       banner: 'WixUIBannerBmp',
       exclamationIcon: 'WixUIExclamationIco',
       infoIcon: 'WixUIInfoIco',
       newIcon: 'WixUINewIco',
-      upIcon: 'WixUIUpIco',
-      dirId: 'AppDirectoryId'
+      upIcon: 'WixUIUpIco'
     };
 
     return Object.keys(images)
@@ -515,9 +513,9 @@ export class MSICreator {
       childRegistry.length > 0 ? '\n' : '',
       childRegistry.join('\n')].join('');
 
-    const dirId =id || this.getComponentId(treePath);
+    let dirId =id || this.getComponentId(treePath);
     if (name === `app-${this.semanticVersion}`) {
-      this.appDirectoryId = dirId;
+      dirId = 'APPLICATIONROOTRESOURCES';
     }
 
     const directoryXml = replaceInString(this.directoryTemplate, {
