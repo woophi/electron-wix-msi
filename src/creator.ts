@@ -788,6 +788,7 @@ export class MSICreator {
         type: 'integer',
         value: '[AUTOUPDATEENABLED]',
         featureAffinity: 'autoUpdate',
+        forceCreateOnInstall: 'yes',
         forceDeleteOnUninstall: 'yes'
       });
     }
